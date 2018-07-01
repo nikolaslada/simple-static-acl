@@ -1,0 +1,24 @@
+{
+	"name": "nikolas-lada/security",
+	"type": "librabry",
+	"description": "This library provides class for security access control like authentication, authorization and a access control list",
+	"keywords": ["ACL", "authentication", "authorization"],
+	"license": ["BSD-3-Clause", "GPL-2.0", "GPL-3.0", "LGPL-3.O"],
+	"authors": [
+		{
+			"name": "Nikolas Lada",
+			"homepage": "https://nikolaslada.cz"
+		}
+	],
+	"require": {
+		"php": ">=7.1"
+	},
+	"require-dev": {
+		"nette/tester": "^2.0"
+	},
+	"autoload": {
+		"psr-4": {
+			"NikolasLada\\SimpleStaticAcl\\": "src/"
+		}
+	}
+}
