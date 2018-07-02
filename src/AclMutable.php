@@ -12,7 +12,6 @@ namespace NikolasLada\SimpleStaticAcl;
 class AclMutable {
 
   const
-    ALL = \NULL,
     ALLOW = true,
     DENY = \NULL;
 
@@ -29,17 +28,17 @@ class AclMutable {
   private $acl = [];
   
   
-  public function addAccessType(string $accessType, ?string $parent = self::DENY): void {
+  public function addAccessType(string $accessType, ?string $parent): void {
     $this->checkItem($accessType, $this->accessTypes);
     $this->accessTypes[$accessType] = $parent;
   }
   
-  public function addRole(string $role, ?string $parent = self::DENY): void {
+  public function addRole(string $role, ?string $parent): void {
     $this->checkItem($role, $this->roles);
     $this->roles[$role] = $parent;
   }
   
-  public function addResource(string $resource, ?string $parent = self::DENY): void {
+  public function addResource(string $resource, ?string $parent): void {
     $this->checkItem($resource, $this->resources);
     $this->resources[$resource] = $parent;
   }

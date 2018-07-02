@@ -11,6 +11,10 @@ namespace NikolasLada\SimpleStaticAcl;
 
 class AclHandler {
 
+  const
+    ALL = \NULL,
+    NONE = \NULL;
+
   /** @var AclMutable */
   private $aclMutable;
   
@@ -18,15 +22,15 @@ class AclHandler {
    * For setters only.
    */
   
-  /** @var string */
+  /** @var null|string */
   private $type;
   /** @var array */
   private $typeList;
-  /** @var string */
+  /** @var null|string */
   private $role;
   /** @var array */
   private $roleList;
-  /** @var string */
+  /** @var null|string */
   private $resource;
   /** @var array */
   private $resourceList;
@@ -40,7 +44,7 @@ class AclHandler {
    * Setters.
    */
   
-  public function setType(string $type): self {
+  public function setType(?string $type): self {
     $this->type = $type;
     if (isset($this->typeList)) {
       unset($this->typeList);
@@ -51,7 +55,7 @@ class AclHandler {
 
   public function setTypeList(array $typeList): self {
     $this->typeList = $typeList;
-    if (isset($this->type)) {
+    if (property_exists($this, 'type')) {
       unset($this->type);
     }
     
@@ -69,7 +73,7 @@ class AclHandler {
 
   public function setRoleList(array $roleList): self {
     $this->roleList = $roleList;
-    if (isset($this->role)) {
+    if (property_exists($this, 'role')) {
       unset($this->role);
     }
     
@@ -87,7 +91,7 @@ class AclHandler {
 
   public function setResourceList(array $resourceList): self {
     $this->resourceList = $resourceList;
-    if (isset($this->resource)) {
+    if (property_exists($this, 'resource')) {
       unset($this->resource);
     }
     
@@ -98,22 +102,22 @@ class AclHandler {
    * Actions.
    */
 
-  public function addType(string $type, string $parent): self {
+  public function addType(string $type, ?string $parent = self::NONE): self {
     $this->aclMutable->addAccessType($type, $parent);
     return $this;
   }
   
-  public function addRole(string $role, string $parent): self {
+  public function addRole(string $role, ?string $parent = self::NONE): self {
     $this->aclMutable->addRole($role, $parent);
     return $this;
   }
   
-  public function addResource(string $resource, string $parent): self {
+  public function addResource(string $resource, ?string $parent = self::NONE): self {
     $this->aclMutable->addResource($resource, $parent);
     return $this;
   }
   
-  public function allow(string $privilege): self {
+  public function allow(?string $privilege = self::ALL): self {
     $this->aclMutable->allow(
         $this->getTypes(),
         $this->getRoles(),
@@ -133,7 +137,7 @@ class AclHandler {
     return $this;
   }
   
-  public function deny(string $privilege): self {
+  public function deny(?string $privilege = self::ALL): self {
     $this->aclMutable->deny(
         $this->getTypes(),
         $this->getRoles(),
@@ -143,7 +147,7 @@ class AclHandler {
     return $this;
   }
   
-  public function denyList(array $privileges): self {
+  public function denyList(array $privileges = self::ALL): self {
     $this->aclMutable->deny(
         $this->getTypes(),
         $this->getRoles(),
