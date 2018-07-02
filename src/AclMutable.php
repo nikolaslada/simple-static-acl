@@ -126,6 +126,12 @@ class AclMutable {
   
   private function appendAllow(array & $acl, array $privileges): ?bool {
     foreach ($privileges as $privilege) {
+      if ($privilege === AclHandler::ALL) {
+        $this->unsetPrivileges($acl);
+        $acl[AclHandler::ALL] = self::ALLOW;
+        break;
+      }
+      
       if (! isset($acl[$privilege])) {
         $acl[$privilege] = self::ALLOW;
       }
@@ -136,12 +142,25 @@ class AclMutable {
   
   private function appendDeny(array & $acl, array $privileges): ?bool {
     foreach ($privileges as $privilege) {
+      if ($privilege === AclHandler::ALL) {
+        $this->unsetPrivileges($acl);
+        $acl[AclHandler::ALL] = self::DENY;
+        break;
+      }
+      
       if (isset($acl[$privilege])) {
         $acl[$privilege] = self::DENY;
       }
+      
     }
     
     return self::DENY;
+  }
+  
+  private function unsetPrivileges(array & $acl): void {
+    foreach ($acl as $k => $v) {
+      unset($acl[$k]);
+    }
   }
   
   public function getAcl(): array {
