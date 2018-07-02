@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace NikolasLada\SimpleStaticAcl;
 
-class AclFactory {
+class AclMutable {
 
   const
     ALL = '',
