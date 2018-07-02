@@ -29,15 +29,15 @@ class AclFactory {
   private $acl = [];
   
   
-  public function addAccessType(string $accessType, string $parent = \NULL): void {
+  public function addAccessType(string $accessType, ?string $parent = self::DENY): void {
     $this->accessTypes[$accessType] = $parent;
   }
   
-  public function addRole(string $role, string $parent = \NULL): void {
+  public function addRole(string $role, ?string $parent = self::DENY): void {
     $this->roles[$role] = $parent;
   }
   
-  public function addResource(string $resource, string $parent = \NULL): void {
+  public function addResource(string $resource, ?string $parent = self::DENY): void {
     $this->resources[$resource] = $parent;
   }
 
