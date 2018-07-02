@@ -41,18 +41,18 @@ class AclMutable {
     $this->resources[$resource] = $parent;
   }
 
-  public function allow(string $accessType, string $role, string $resource, array $privileges): void {
-    $this->setRights($accessType, $role, $resource, $privileges, self::ALLOW);
+  public function allow(array $accessTypes, array $roles, array $resources, array $privileges): void {
+    $this->setRights($accessTypes, $roles, $resources, $privileges, self::ALLOW);
   }
   
-  public function deny(string $accessType, string $role, string $resource, array $privileges): void {
-    $this->setRights($accessType, $role, $resource, $privileges, self::DENY);
+  public function deny(array $accessTypes, array $roles, array $resources, array $privileges): void {
+    $this->setRights($accessTypes, $roles, $resources, $privileges, self::DENY);
   }
   
-  private function setRights(string $accessType, string $role, string $resource, array $privileges, ?bool $status): void {
-    $accessTypeList = $this->getItemList($accessType, $this->accessTypes);
-    $roleList = $this->getItemList($role, $this->roles);
-    $resourceList = $this->getItemList($resource, $this->resources);
+  private function setRights(array $accessTypes, array $roles, array $resources, array $privileges, ?bool $status): void {
+    $accessTypeList = $this->getItemList($accessTypes, $this->accessTypes);
+    $roleList = $this->getItemList($roles, $this->roles);
+    $resourceList = $this->getItemList($resources, $this->resources);
     
     foreach ($accessTypeList as $accessType) {
       foreach ($roleList as $role) {
@@ -68,12 +68,16 @@ class AclMutable {
     
   }
   
-  private function getItemList(string $code, array $resource): array {
-    if ($code === self::ALL) {
-      $list = array_keys($resource);
-    } else {
-      $list = [];
-      $this->getItemWithDescendants($code, $resource, $list);
+  private function getItemList(array $codeList, array $resource): array {
+    $list = [];
+    foreach ($codeList as $code) {
+      if ($code === self::ALL) {
+        $list = array_keys($resource);
+        break;
+      } else {
+        $this->getItemWithDescendants($code, $resource, $list);
+      }
+
     }
     
     return $list;
