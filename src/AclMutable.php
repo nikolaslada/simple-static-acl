@@ -30,15 +30,24 @@ class AclMutable {
   
   
   public function addAccessType(string $accessType, ?string $parent = self::DENY): void {
+    $this->checkItem($accessType, $this->accessTypes);
     $this->accessTypes[$accessType] = $parent;
   }
   
   public function addRole(string $role, ?string $parent = self::DENY): void {
+    $this->checkItem($role, $this->roles);
     $this->roles[$role] = $parent;
   }
   
   public function addResource(string $resource, ?string $parent = self::DENY): void {
+    $this->checkItem($resource, $this->resources);
     $this->resources[$resource] = $parent;
+  }
+  
+  private function checkItem(string $item, array $itemList): void {
+    if (in_array($item, $itemList, true)) {
+      throw new \DomainException("The value of first parameter $item is already added.");
+    }
   }
 
   public function allow(array $accessTypes, array $roles, array $resources, array $privileges): void {
