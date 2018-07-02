@@ -12,7 +12,7 @@ namespace NikolasLada\SimpleStaticAcl;
 class AclMutable {
 
   const
-    ALL = '',
+    ALL = \NULL,
     ALLOW = true,
     DENY = \NULL;
 
@@ -71,7 +71,7 @@ class AclMutable {
   private function getItemList(array $codeList, array $resource): array {
     $list = [];
     foreach ($codeList as $code) {
-      if ($code === self::ALL) {
+      if (\is_null($code)) {
         $list = array_keys($resource);
         break;
       } else {
