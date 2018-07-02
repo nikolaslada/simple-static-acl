@@ -29,27 +29,27 @@ class AclFactory {
   private $acl = [];
   
   
-  public function addAccessType(string $accessType, string $parent = \NULL) {
+  public function addAccessType(string $accessType, string $parent = \NULL): void {
     $this->accessTypes[$accessType] = $parent;
   }
   
-  public function addRole(string $role, string $parent = \NULL) {
+  public function addRole(string $role, string $parent = \NULL): void {
     $this->roles[$role] = $parent;
   }
   
-  public function addResource(string $resource, $parent = \NULL) {
+  public function addResource(string $resource, string $parent = \NULL): void {
     $this->resources[$resource] = $parent;
   }
 
-  public function allow(string $accessType, string $role, string $resource, array $privileges) {
+  public function allow(string $accessType, string $role, string $resource, array $privileges): void {
     $this->setRights($accessType, $role, $resource, $privileges, self::ALLOW);
   }
   
-  public function deny(string $accessType, string $role, string $resource, array $privileges) {
+  public function deny(string $accessType, string $role, string $resource, array $privileges): void {
     $this->setRights($accessType, $role, $resource, $privileges, self::DENY);
   }
   
-  private function setRights(string $accessType, string $role, string $resource, array $privileges, ?bool $status) {
+  private function setRights(string $accessType, string $role, string $resource, array $privileges, ?bool $status): void {
     $accessTypeList = $this->getItemList($accessType, $this->accessTypes);
     $roleList = $this->getItemList($role, $this->roles);
     $resourceList = $this->getItemList($resource, $this->resources);
@@ -95,7 +95,7 @@ class AclFactory {
     return $list;
   }
 
-  private function appendToAcl(array & $acl, array $path, ?bool $status) {
+  private function appendToAcl(array & $acl, array $path, ?bool $status): ?bool {
     $current = current($path);
     if (count($path) > 1) {
       if (! isset( $acl[$current] ) ) {
@@ -112,24 +112,24 @@ class AclFactory {
     }
   }
   
-  private function appendAllow(array & $acl, array $privileges): void {
+  private function appendAllow(array & $acl, array $privileges): ?bool {
     foreach ($privileges as $privilege) {
       if (! isset($acl[$privilege])) {
         $acl[$privilege] = self::ALLOW;
       }
     }
     
-    return;
+    return self::ALLOW;
   }
   
-  private function appendDeny(array & $acl, array $privileges): void {
+  private function appendDeny(array & $acl, array $privileges): ?bool {
     foreach ($privileges as $privilege) {
       if (isset($acl[$privilege])) {
         $acl[$privilege] = self::DENY;
       }
     }
     
-    return;
+    return self::DENY;
   }
   
   public function getAcl(): array {
