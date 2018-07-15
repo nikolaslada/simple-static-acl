@@ -73,13 +73,11 @@ class AclMutable {
     foreach ($accessTypeList as $accessType) {
       foreach ($roleList as $role) {
         foreach ($resourceList as $resource) {
-          foreach ($privileges as $privilege) {
             $this->appendToAcl(
                 $this->acl,
-                [$accessType, $role, $resource, $privilege],
+                [$accessType, $role, $resource, $privileges],
                 $status
             );
-          }
         }
       }
     }
@@ -138,21 +136,31 @@ class AclMutable {
     }
   }
   
-  private function appendAllow(array & $acl, string $privilege): void {
-    if ($privilege === AclHandler::ALL) {
-      $this->unsetPrivileges($acl);
-      $acl[AclHandler::ALL] = self::ALLOW;
-    } elseif (! isset($acl[$privilege])) {
-      $acl[$privilege] = self::ALLOW;
+  private function appendAllow(array & $acl, array $privileges): void {
+    foreach ($privileges as $privilege) {
+      if ($privilege === AclHandler::ALL) {
+        $this->unsetPrivileges($acl);
+        $acl[AclHandler::ALL] = self::ALLOW;
+        break;
+      }
+      
+      if (! isset($acl[$privilege])) {
+        $acl[$privilege] = self::ALLOW;
+      }
     }
   }
   
-  private function appendDeny(array & $acl, string $privilege): void {
-    if ($privilege === AclHandler::ALL) {
-      $this->unsetPrivileges($acl);
-      $acl[AclHandler::ALL] = self::DENY;
-    } elseif (isset($acl[$privilege])) {
-      $acl[$privilege] = self::DENY;
+  private function appendDeny(array & $acl, array $privileges): void {
+    foreach ($privileges as $privilege) {
+      if ($privilege === AclHandler::ALL) {
+        $this->unsetPrivileges($acl);
+        $acl[AclHandler::ALL] = self::DENY;
+        break;
+      }
+      
+      if (isset($acl[$privilege])) {
+        $acl[$privilege] = self::DENY;
+      }
     }
   }
   

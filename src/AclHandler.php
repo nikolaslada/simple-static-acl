@@ -157,12 +157,20 @@ class AclHandler {
     return $this;
   }
   
+  public function getAcl(): array {
+    return $this->aclMutable->getAcl();
+  }
+  
+  /**
+   * Non-public methods.
+   */
+  
   private function getTypes(): array {
-    if (! (isset($this->type) && isset($this->typeList)) ) {
+    if (!property_exists($this, 'type') && !isset($this->typeList)) {
       throw new \DomainException;
     }
     
-    if (isset($this->type)) {
+    if (property_exists($this, 'type')) {
       return [$this->type];
     } else {
       return $this->typeList;
@@ -170,11 +178,11 @@ class AclHandler {
   }
   
   private function getRoles(): array {
-    if (! (isset($this->role) && isset($this->roleList)) ) {
+    if (!property_exists($this, 'role') && !isset($this->roleList)) {
       throw new \DomainException;
     }
     
-    if (isset($this->role)) {
+    if (property_exists($this, 'role')) {
       return [$this->role];
     } else {
       return $this->roleList;
@@ -182,11 +190,11 @@ class AclHandler {
   }
   
   private function getResources(): array {
-    if (! (isset($this->resource) && isset($this->resourceList)) ) {
+    if (!property_exists($this, 'resource') && isset($this->resourceList)) {
       throw new \DomainException;
     }
     
-    if (isset($this->resource)) {
+    if (property_exists($this, 'resource')) {
       return [$this->resource];
     } else {
       return $this->resourceList;
