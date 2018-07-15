@@ -57,6 +57,14 @@ class AclMutable {
     $this->setRights($accessTypes, $roles, $resources, $privileges, self::DENY);
   }
   
+  public function getAcl(): array {
+    return $this->acl;
+  }
+  
+  /**
+   * Non-public methods.
+   */
+  
   private function setRights(array $accessTypes, array $roles, array $resources, array $privileges, ?bool $status): void {
     $accessTypeList = $this->getItemList($accessTypes, $this->accessTypes);
     $roleList = $this->getItemList($roles, $this->roles);
@@ -152,10 +160,6 @@ class AclMutable {
     foreach ($acl as $k => $v) {
       unset($acl[$k]);
     }
-  }
-  
-  public function getAcl(): array {
-    return $this->acl;
   }
 
 }
